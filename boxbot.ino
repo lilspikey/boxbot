@@ -2,8 +2,8 @@
 
 #define TOP_SPEED 200
 
-HBridgeMotor leftMotor(6, 5, 4);
-HBridgeMotor rightMotor(9, 8, 7);
+HBridgeMotor leftMotor(6, 7, 8);
+HBridgeMotor rightMotor(11, 10, 9);
 
 void setup()
 {
