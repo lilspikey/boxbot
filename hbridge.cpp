@@ -2,30 +2,31 @@
 #include "hbridge.h"
 
 
-HBridgeMotor::HBridgeMotor(int enablePin, int  forwardPin, int backwardPin)
+HBridgeMotor::HBridgeMotor(int enablePin, int  forwardPin, int backwardPin, int speedRange)
   : _enablePin(enablePin),
     _forwardPin(forwardPin),
-    _backwardPin(backwardPin)
+    _backwardPin(backwardPin),
+    _speedRange(speedRange)
 {
   pinMode(enablePin, OUTPUT);
   pinMode(forwardPin, OUTPUT);
   pinMode(backwardPin, OUTPUT);
 }
 
-void HBridgeMotor::velocity(int v)
+void HBridgeMotor::velocity(float v)
 {
-  int s = abs(v);
-  if ( v > 0 ) {
+  int s = (int)(_speedRange*min(1.0f, abs(v)));
+  if ( s == 0 ) {
+    digitalWrite(_forwardPin, LOW);
+    digitalWrite(_backwardPin, LOW);
+  }
+  else if ( v >= 0 ) {
     digitalWrite(_forwardPin, HIGH);
     digitalWrite(_backwardPin, LOW);
   }
-  else if ( v < 0 ) {
+  else if ( v <= 0 ) {
     digitalWrite(_forwardPin, LOW);
     digitalWrite(_backwardPin, HIGH);
-  }
-  else {
-    digitalWrite(_forwardPin, LOW);
-    digitalWrite(_backwardPin, LOW);
   }
   analogWrite(_enablePin, s);
 }
